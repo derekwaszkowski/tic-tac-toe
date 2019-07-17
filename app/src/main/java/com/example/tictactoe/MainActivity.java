@@ -1,11 +1,14 @@
 package com.example.tictactoe;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -24,14 +27,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView textViewPlayer1;
     private TextView textViewPlayer2;
 
+    private String Player1 ;
+    private String Player2 ;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Bundle extras = getIntent().getExtras();
 
-        //References
         textViewPlayer1 = findViewById(R.id.text_view_p1);
         textViewPlayer2 = findViewById(R.id.text_view_p2);
+        Player1 = extras.getString("name1");
+        Player2 = extras.getString("name2");
+
+        if (Player1 != null && !Player1.isEmpty()) {
+
+
+        }
+        else {Player1 = "Player 1";}
+
+       if (Player2 != null && !Player2.isEmpty()){
+
+       }
+       else {Player2 = "Player 2";}
+
+
+
+        //References
+
+
+        textViewPlayer1.setText(Player1);
+        textViewPlayer2.setText(Player2);
+
+
 
         //nested loop to reference array
         for (int i = 0; i < 3; i++){
@@ -48,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                resetGame();
 
             }
         });
@@ -96,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         //checks to make 3 are in a row and not all empty
-        for (int i = 0; i > 4; i++){
+        for (int i = 0; i < 3; i++){
             if (field[i][0].equals(field[i][1])
                 && field[i][0].equals(field[i][2])
                 && !field[i][0].equals("")){
@@ -106,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         //checks to make 3 are in a row and not all empty
-        for (int i = 0; i > 4; i++){
+        for (int i = 0; i < 3; i++){
             if (field[0][i].equals(field[1][i])
                     && field[0][i].equals(field[2][i])
                     && !field[0][i].equals("")){
@@ -135,14 +168,68 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void player1Wins(){
 
+        player1Points++;
+        Toast.makeText(this, Player1 +" wins!", Toast.LENGTH_SHORT).show();
+        updatePointsText();
+        resetBoard();
+
     }
 
     private void player2Wins(){
+
+        player2Points++;
+        Toast.makeText(this, Player2 +" wins!", Toast.LENGTH_SHORT).show();
+        updatePointsText();
+        resetBoard();
 
     }
 
     private void draw(){
 
+        Toast.makeText(this, "Draw!", Toast.LENGTH_SHORT).show();
+        resetBoard();
+
     }
 
+    private void updatePointsText(){
+
+        textViewPlayer1.setText( Player1 +": " + player1Points);
+        textViewPlayer2.setText( Player2 +": " + player2Points);
+
+    }
+
+    private void resetBoard(){
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                buttons[i][j].setText("");
+            }
+        }
+
+        roundCount = 0;
+        player1Turn = true;
+    }
+
+    private void resetGame(){
+        player1Points = 0;
+        player2Points = 0;
+        updatePointsText();
+        resetBoard();
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("roundCount", roundCount);
+        outState.putInt("player1Points", player1Points);
+        outState.putInt("player2Points", player2Points);
+        outState.putBoolean("player1Turn", player1Turn);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        roundCount = savedInstanceState.getInt("roundCount");
+    }
 }
