@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
+//7.17.2019
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     // 2 dimensional array
