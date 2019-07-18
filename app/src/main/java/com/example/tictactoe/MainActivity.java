@@ -35,12 +35,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
+
         Bundle extras = getIntent().getExtras();
 
-        textViewPlayer1 = findViewById(R.id.text_view_p1);
-        textViewPlayer2 = findViewById(R.id.text_view_p2);
+        textViewPlayer1 = findViewById(R.id.text_view_p2);
+        textViewPlayer2 = findViewById(R.id.text_view_p1);
         Player1 = extras.getString("name1");
         Player2 = extras.getString("name2");
 
